@@ -1,0 +1,23 @@
+name: "Install Python"
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  asdf:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: asdf-vm/actions/install@v1
+  setup-python:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - id: version
+        run: |
+          python_version="$(cat .tool-versions | awk '{printf $2}')"
+          echo "::set-output name=version::${python_version}"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ steps.version.outputs.version }}
